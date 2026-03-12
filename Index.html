@@ -1,2 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sunny Jim Stingey Joke T-Shirts</title>
 
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+background:#f4f4f4;
+margin:0;
+padding:20px;
+}
+
+h1{
+font-family:"Comic Sans MS",cursive;
+font-size:8vw;
+}
+
+#baseImage{
+width:60vw;
+max-width:500px;
+margin:20px auto;
+display:block;
+}
+
+select{
+padding:8px;
+font-size:16px;
+margin-bottom:10px;
+}
+
+#thumbnailContainer{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+.thumb-container{
+display:flex;
+flex-direction:column;
+align-items:center;
+background:white;
+padding:10px;
+border-radius:8px;
+width:280px;
+position:relative;
+box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+.large-img{
+width:100%;
+height:auto;
+border:2px solid #ccc;
+cursor:pointer;
+}
+
+.magnifier{
+position:absolute;
+top:5px;
+right:5px;
+font-size:20px;
+background:white;
+border-radius:50%;
+padding:5px;
+cursor:pointer;
+}
+
+.thumb-buttons{
+display:flex;
+gap:5px;
+flex-wrap:wrap;
+justify-content:center;
+margin-top:6px;
+}
+
+button{
+padding:8px 14px;
+cursor:pointer;
+border-radius:5px;
+border:none;
+background:#ddd;
+}
+
+button:hover{
+background:#ccc;
+}
+
+.add-effect:active{
+transform:scale(.92);
+background:#4CAF50;
+color:white;
+}
+
+.cart-item{
+background:white;
+margin:10px auto;
+padding:10px;
+max-width:420px;
+border-radius:6px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.remove-btn{
+background:#ff4444;
+color:white;
+}
+
+#zoomOverlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.9);
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+#zoomOverlay img{
+max-width:90%;
+max-height:90%;
+}
+
+#cartContainer{
+display:none;
+margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Sunny Jim Stingey Joke T-Shirts</h1>
+
+<img id="baseImage" src="sjimstingey.png?v=2">
+
+<br>
+
+<select id="jokeSelect">
+<option value="">Select joke</option>
+</select>
+
+<br>
+
+<button onclick="resetHome()">Home / Select by Image</button>
+
+<div id="thumbnailContainer"></div>
+
+<div id="cartContainer">
+
+<h2>Cart</h2>
+
+<div id="cartDisplay"></div>
+
+</div>
+
+<div id="paypal-button-container"></div>
+
+<div id="zoomOverlay" onclick="closeZoom()">
+<img id="zoomedImage">
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=AeSZxXPc1XIsX0SgmmuxofHxpfOJZCgG1WAiKmr36UR9nx9i4WQWt3MJCdUx85WgUyJ6Lt5-VltJ1lkm&currency=AUD"></script>
+
+<script>
+
+const version="?v=2"
+
+const designs=[
+
+{id:"borrowed_pen",name:"Borrowed a pen",black:"pen_black_large.png",white:"pen_white_large.png"},
+
+{id:"kids_lunches",name:"Kids lunches",black:"kidslunches_black_large.png",white:"kidslunches_white_large.png"},
+
+{id:"sliced_bread",name:"Sliced bread",black:"bread_black_large.png",white:"bread_white_large.png"},
+
+{id:"got_arrested",name:"I got arrested",black:"gotarrested_black_large.png",white:"gotarrested_white_large.png"},
+
+{id:"seagulls",name:"I never throw chips to seagulls",black:"seagulls_black_large.png",white:"seagulls_white_large.png"}
+
+]
+
+let cart=[]
+let nextId=1
+const price=30
+
+function populateSelector(){
+
+const select=document.getElementById("jokeSelect")
+
+designs.forEach(d=>{
+
+const opt=document.createElement("option")
+
+opt.value=d.id
+
+opt.textContent=d.name
+
+select.appendChild(opt)
+
+})
+
+}
+
+function createCard(design,color){
+
+const div=document.createElement("div")
+div.className="thumb-container"
+
+const img=document.createElement("img")
+
+img.src=(color==="black"?design.black:design.white)+version
+
+img.className="large-img"
+
+img.onclick=()=>openZoom(img.src)
+
+div.appendChild(img)
+
+const magn=document.createElement("div")
+
+magn.className="magnifier"
+
+magn.innerHTML="🔍"
+
+magn.onclick=()=>openZoom(img.src)
+
+div.appendChild(magn)
+
+const size=document.createElement("select")
+
+;["Small","Medium","Large","XL"].forEach(s=>{
+
+const o=document.createElement("option")
+
+o.value=s
+
+o.textContent=s
+
+size.appendChild(o)
+
+})
+
+div.appendChild(size)
+
+const qty=document.createElement("select")
+
+for(let i=1;i<=10;i++){
+
+const o=document.createElement("option")
+
+o.value=i
+
+o.textContent=i
+
+qty.appendChild(o)
+
+}
+
+div.appendChild(qty)
+
+const buttons=document.createElement("div")
+
+buttons.className="thumb-buttons"
+
+const add=document.createElement("button")
+
+add.textContent="Add to Cart"
+
+add.className="add-effect"
+
+add.onclick=()=>{
+
+cart.push({
+
+id:nextId++,
+
+name:design.name,
+
+color,
+
+size:size.value,
+
+qty:parseInt(qty.value),
+
+price
+
+})
+
+updateCart()
+
+}
+
+buttons.appendChild(add)
+
+const buy=document.createElement("button")
+
+buy.textContent="Buy"
+
+buy.onclick=()=>{
+
+cart.push({
+
+id:nextId++,
+
+name:design.name,
+
+color,
+
+size:size.value,
+
+qty:parseInt(qty.value),
+
+price
+
+})
+
+updateCart()
+
+document.getElementById("paypal-button-container").scrollIntoView({behavior:"smooth"})
+
+}
+
+buttons.appendChild(buy)
+
+const view=document.createElement("button")
+
+view.textContent="View Cart"
+
+view.onclick=()=>document.getElementById("cartContainer").scrollIntoView({behavior:"smooth"})
+
+buttons.appendChild(view)
+
+div.appendChild(buttons)
+
+return div
+
+}
+
+function renderGrid(){
+
+const container=document.getElementById("thumbnailContainer")
+
+container.innerHTML=""
+
+designs.forEach(d=>{
+
+container.appendChild(createCard(d,"black"))
+
+container.appendChild(createCard(d,"white"))
+
+})
+
+}
+
+function filterJoke(){
+
+const id=document.getElementById("jokeSelect").value
+
+if(!id){renderGrid();return}
+
+const container=document.getElementById("thumbnailContainer")
+
+container.innerHTML=""
+
+const design=designs.find(d=>d.id===id)
+
+container.appendChild(createCard(design,"black"))
+
+container.appendChild(createCard(design,"white"))
+
+}
+
+function resetHome(){
+
+document.getElementById("jokeSelect").value=""
+
+renderGrid()
+
+}
+
+document.getElementById("jokeSelect").addEventListener("change",filterJoke)
+
+function updateCart(){
+
+const display=document.getElementById("cartDisplay")
+
+const container=document.getElementById("cartContainer")
+
+display.innerHTML=""
+
+if(cart.length===0){
+
+container.style.display="none"
+
+return
+
+}
+
+container.style.display="block"
+
+let subtotal=0
+
+cart.forEach(item=>{
+
+const row=document.createElement("div")
+
+row.className="cart-item"
+
+const text=document.createElement("span")
+
+text.textContent=`${item.color} ${item.name} ${item.size} x${item.qty}`
+
+row.appendChild(text)
+
+const total=item.price*item.qty
+
+subtotal+=total
+
+const right=document.createElement("div")
+
+const priceLabel=document.createElement("span")
+
+priceLabel.textContent=` $${total} `
+
+const remove=document.createElement("button")
+
+remove.textContent="Remove"
+
+remove.className="remove-btn"
+
+remove.onclick=()=>{
+
+cart=cart.filter(c=>c.id!==item.id)
+
+updateCart()
+
+}
+
+right.appendChild(priceLabel)
+
+right.appendChild(remove)
+
+row.appendChild(right)
+
+display.appendChild(row)
+
+})
+
+const shipping=cart.length<=2?12:cart.length<=5?20:29
+
+const total=subtotal+shipping
+
+const totalDiv=document.createElement("div")
+
+totalDiv.innerHTML=`<p>Subtotal $${subtotal}</p>
+<p>Shipping $${shipping}</p>
+<h3>Total $${total}</h3>`
+
+display.appendChild(totalDiv)
+
+renderPayPal(total)
+
+}
+
+function renderPayPal(total){
+
+const container=document.getElementById("paypal-button-container")
+
+container.innerHTML=""
+
+if(!total || !window.paypal) return
+
+paypal.Buttons({
+
+createOrder:(data,actions)=>{
+
+return actions.order.create({
+
+purchase_units:[{
+
+amount:{value:total.toFixed(2)}
+
+}]
+
+})
+
+},
+
+onApprove:(data,actions)=>{
+
+return actions.order.capture().then(()=>{
+
+alert("Payment successful!")
+
+cart=[]
+
+updateCart()
+
+})
+
+}
+
+}).render("#paypal-button-container")
+
+}
+
+function openZoom(src){
+
+document.getElementById("zoomOverlay").style.display="flex"
+
+document.getElementById("zoomedImage").src=src
+
+}
+
+function closeZoom(){
+
+document.getElementById("zoomOverlay").style.display="none"
+
+}
+
+populateSelector()
+
+renderGrid()
+
+</script>
+
+</body>
+</html>
