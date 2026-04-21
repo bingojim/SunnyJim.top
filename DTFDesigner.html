@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro DTF Designer - Clean</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Roboto+Slab&family=Gravitas+One&family=Cinzel&family=Graduate&family=Shrikhand&family=Montserrat&family=Luckiest+Guy&family=Roboto+Mono&family=Rubik+Mono+One&family=Monoton&family=Fugaz+One&family=Geologica&family=Lilita+One&family=Petit+Formal+Script&family=Pacifico&family=Sofia&family=Lobster&family=Barrio&family=Boldonse&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+    body { background:#eee; margin:0; padding:5px; font-family: sans-serif; display:flex; flex-direction:column; align-items:center; }
+    .panel { background:#fff; padding:8px; border-radius:8px; width:100%; max-width:380px; box-shadow:0 2px 5px rgba(0,0,0,0.1); display:flex; flex-direction:column; gap:4px; font-size:11px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:4px; align-items:center; }
+    .shirt-box { width:100%; max-width:380px; height:200px; border-radius:10px; display:flex; justify-content:center; align-items:center; margin-top:5px; transition: background 0.3s; }
+    
+    /* Centered text */
+    textarea { width:100%; height:30px; box-sizing:border-box; text-align: center; resize: vertical; }
+    
+    input, select { width:100%; padding:2px; }
+    .group { background:#f9f9f9; padding:4px; border-radius:4px; border:1px solid #ddd; }
+    label { font-weight:bold; display: block; margin-top: 5px; }
+    
+    #content { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        width: fit-content; 
+        padding: 10px; 
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="panel">
+    <button onclick="randTextColors()" style="background:#444; color:white; padding:5px; border:none; width:100%;">Randomize Text Colors</button>
+    
+    <label>Shirt Color BG: <input type="color" id="shirtColor" value="#1A1A1A" oninput="update()"></label>
+    
+    <label>S:</label>
+    <textarea id="part1Input"></textarea>
+    
+    <label>P:</label>
+    <textarea id="part2Input"></textarea>
+    
+    <div class="group">
+        <select id="font1"></select>
+        <div class="row">
+            <input type="color" id="color1" value="#FFA500" title="Text">
+            <input type="number" id="size1" value="30" placeholder="Size">
+            <input type="number" id="border1" value="2" placeholder="Brd">
+        </div>
+        <input type="color" id="borderColor1" value="#000000" title="Border Color" style="height:20px;">
+    </div>
+
+    <div class="group">
+        <select id="font2"></select>
+        <div class="row">
+            <input type="color" id="color2" value="#FFFFFF" title="Text">
+            <input type="number" id="size2" value="20" placeholder="Size">
+            <input type="number" id="border2" value="2" placeholder="Brd">
+        </div>
+        <input type="color" id="borderColor2" value="#000000" title="Border Color" style="height:20px;">
+    </div>
+    
+    <div class="row">
+        <button onclick="exportDesign(true)" style="background:blue; color:white; padding:5px; border:none;">Save w/ BG</button>
+        <button onclick="exportDesign(false)" style="background:green; color:white; padding:5px; border:none;">Export DTF (Trans)</button>
+    </div>
+</div>
+
+<div id="shirt" class="shirt-box">
+    <div id="content">
+        <div id="text1"></div>
+        <div id="text2" style="margin-top:5px;"></div>
+    </div>
+</div>
+
+<script>
+const fonts = ["Merriweather", "Roboto Slab", "Gravitas One", "Cinzel", "Graduate", "Shrikhand", "Montserrat", "Luckiest Guy", "Roboto Mono", "Rubik Mono One", "Monoton", "Fugaz One", "Geologica", "Lilita One", "Petit Formal Script", "Pacifico", "Sofia", "Lobster", "Barrio", "Boldonse"];
+const s1 = document.getElementById("font1"), s2 = document.getElementById("font2");
+fonts.forEach(f => { s1.add(new Option(f, f)); s2.add(new Option(f, f)); });
+s1.value = "Luckiest Guy"; s2.value = "Roboto Slab";
+
+function getShadow(b, color) {
+    return b > 0 ? `${b}px ${b}px 0px ${color}, -${b}px -${b}px 0px ${color}, ${b}px -${b}px 0px ${color}, -${b}px ${b}px 0px ${color}` : 'none';
+}
+
+function update() {
+    document.getElementById("shirt").style.backgroundColor = document.getElementById("shirtColor").value;
+    const t1 = document.getElementById("text1");
+    t1.innerText = document.getElementById("part1Input").value.toUpperCase();
+    t1.style.fontFamily = s1.value;
+    t1.style.color = document.getElementById("color1").value;
+    t1.style.fontSize = document.getElementById("size1").value + "px";
+    t1.style.textShadow = getShadow(document.getElementById("border1").value, document.getElementById("borderColor1").value);
+
+    const t2 = document.getElementById("text2");
+    t2.innerText = document.getElementById("part2Input").value;
+    t2.style.fontFamily = s2.value;
+    t2.style.color = document.getElementById("color2").value;
+    t2.style.fontSize = document.getElementById("size2").value + "px";
+    t2.style.textShadow = getShadow(document.getElementById("border2").value, document.getElementById("borderColor2").value);
+}
+
+function randTextColors() {
+    const randomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+    document.getElementById("color1").value = randomColor();
+    document.getElementById("color2").value = randomColor();
+    document.getElementById("borderColor1").value = randomColor();
+    document.getElementById("borderColor2").value = randomColor();
+    update();
+}
+
+function exportDesign(includeBg) {
+    let content = document.getElementById("content");
+    let originalBg = content.style.backgroundColor;
+    if (includeBg) {
+        content.style.backgroundColor = document.getElementById("shirtColor").value;
+        content.style.margin = "-1px";
+    }
+    html2canvas(content, {backgroundColor: null, logging: false, useCORS: true}).then(canvas => {
+        let a = document.createElement('a'); 
+        a.download = includeBg ? 'design-with-bg.png' : 'dtf-transparent.png'; 
+        a.href = canvas.toDataURL(); 
+        a.click();
+        content.style.backgroundColor = originalBg;
+        content.style.margin = "0 auto";
+    });
+}
+
+document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener("input", update));
+update();
+</script>
+</body>
+</html>
