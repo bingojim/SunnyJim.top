@@ -3,145 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <title>Sunny Jim Stingy Joke T-Shirts</title>
-
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <style>
-body{
-  font-family:Arial;
-  text-align:center;
-  background:#f4f4f4;
-  margin:0;
-  padding:20px;
-}
-h1{
-  font-family:"Comic Sans MS",cursive;
-  font-size:8vw;
-}
-#baseImage{
-  width:60vw;
-  max-width:500px;
-  margin:20px auto;
-  display:block;
-}
-select{
-  padding:8px;
-  font-size:16px;
-  margin-bottom:10px;
-}
-#thumbnailContainer{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-}
-.thumb-container{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  background:white;
-  padding:10px;
-  border-radius:8px;
-  width:280px;
-  position:relative;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
-.large-img{
-  width:100%;
-  height:auto;
-  border:2px solid #ccc;
-  cursor:pointer;
-}
-.magnifier{
-  position:absolute;
-  top:5px;
-  right:5px;
-  font-size:20px;
-  background:white;
-  border-radius:50%;
-  padding:5px;
-  cursor:pointer;
-}
-.thumb-buttons{
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-top:6px;
-}
-button{
-  padding:8px 14px;
-  cursor:pointer;
-  border-radius:5px;
-  border:none;
-  background:#ddd;
-}
-button:hover{
-  background:#ccc;
-}
-.add-effect:active{
-  transform:scale(.92);
-  background:#4CAF50;
-  color:white;
-}
-.cart-item{
-  background:white;
-  margin:10px auto;
-  padding:10px;
-  max-width:420px;
-  border-radius:6px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.remove-btn{
-  background:#ff4444;
-  color:white;
-}
-#zoomOverlay{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,.9);
-  justify-content:center;
-  align-items:center;
-  z-index:999;
-}
-#zoomOverlay img{
-  max-width:90%;
-  max-height:90%;
-}
-#cartContainer{
-  display:none;
-  margin-top:20px;
-}
+body{font-family:Arial;text-align:center;background:#f4f4f4;margin:0;padding:20px;}
+h1{font-family:"Comic Sans MS",cursive;font-size:8vw;}
+#baseImage{width:60vw;max-width:500px;margin:20px auto;display:block;}
+select{padding:8px;font-size:16px;margin-bottom:10px;}
+#thumbnailContainer{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;}
+.thumb-container{display:flex;flex-direction:column;align-items:center;background:white;padding:10px;border-radius:8px;width:280px;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.1);}
+.large-img{width:100%;height:auto;border:2px solid #ccc;cursor:pointer;}
+.magnifier{position:absolute;top:5px;right:5px;font-size:20px;background:white;border-radius:50%;padding:5px;cursor:pointer;}
+.thumb-buttons{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+button{padding:8px 14px;cursor:pointer;border-radius:5px;border:none;background:#ddd;}
+button:hover{background:#ccc;}
+.add-effect:active{transform:scale(.92);background:#4CAF50;color:white;}
+.cart-item{background:white;margin:10px auto;padding:10px;max-width:420px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;}
+.remove-btn{background:#ff4444;color:white;}
+#zoomOverlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);justify-content:center;align-items:center;z-index:999;}
+#zoomOverlay img{max-width:90%;max-height:90%;}
+#cartContainer{display:none;margin-top:20px;}
 </style>
 </head>
-
 <body>
 
 <h1>Sunny Jim Stingy Joke T-Shirts</h1>
-
 <img id="baseImage" src="sjimstingy.png">
-
 <br>
-
-<select id="jokeSelect">
-  <option value="">Select joke</option>
-</select>
-
+<select id="jokeSelect"><option value="">Select joke</option></select>
 <br>
-
 <button onclick="resetHome()">Home / Select by Image</button>
 
 <div id="thumbnailContainer"></div>
 
 <div id="cartContainer">
-<h2>Cart</h2>
-<div id="cartDisplay"></div>
+  <h2>Cart</h2>
+  <div id="cartDisplay"></div>
 </div>
 
 <div id="paypal-button-container"></div>
@@ -153,16 +49,23 @@ button:hover{
 <script src="https://www.paypal.com/sdk/js?client-id=AeSZxXPc1XIsX0SgmmuxofHxpfOJZCgG1WAiKmr36UR9nx9i4WQWt3MJCdUx85WgUyJ6Lt5-VltJ1lkm&currency=AUD"></script>
 
 <script>
-
 const version="?v=2";
 
 const designs = [
-  {id:"cake", name:"BUT YOU TAKE THE CAKE", black:"Cake_black_large.png", white:"Cake_white_large.png"},
-{id:"borrowed_pen", name:"Borrowed a pen", black:"pen_black_large.png", white:"pen_white_large.png"},
-  {id:"kids_lunches", name:"Kids lunches", black:"kidslunches_black_large.png", white:"kidslunches_white_large.png"},
-  {id:"sliced_bread", name:"Sliced bread", black:"bread_black_large.png", white:"bread_white_large.png"},
-  {id:"got_arrested", name:"I got arrested", black:"gotarrested_black_large.png", white:"gotarrested_white_large.png"},
-  {id:"seagulls", name:"I never throw chips to seagulls", black:"seagulls_black_large.png", white:"seagulls_white_large.png"}
+  {id:"cake", name:"BUT YOU TAKE THE CAKE", black:"Cake_black_large.png", white:"Cake_white_large.png", thumbBlack:"Cake_black_thumb.png", thumbWhite:"Cake_white_thumb.png"},
+  {id:"caketext", name:"BUT YOU TAKE THE CAKE (Text)", black:null, white:"caketext_white_large.png", thumbBlack:null, thumbWhite:"caketext_white_thumb.png"},
+  {id:"borrowed_pen", name:"Borrowed a pen", black:"pen_black_large.png", white:"pen_white_large.png", thumbBlack:"pen_black_thumb.png", thumbWhite:"pen_white_thumb.png"},
+  {id:"pentext", name:"Borrowed a pen (Text)", black:"pentext_black_large.png", white:"pentext_white_large.png", thumbBlack:"pentext_black_thumb.png", thumbWhite:"pentext_white_thumb.png"},
+  {id:"kids_lunches", name:"Kids lunches", black:"kidslunches_black_large.png", white:"kidslunches_white_large.png", thumbBlack:"kidslunches_black_thumb.png", thumbWhite:"kidslunches_white_thumb.png"},
+  {id:"kidslunchestext", name:"Kids lunches (Text)", black:"kidslunchestext_black_large.png", white:"kidslunchestext_white_large.png", thumbBlack:"kidslunchestext_black_thumb.png", thumbWhite:"kidslunchestext_white_thumb.png"},
+  {id:"sliced_bread", name:"Sliced bread", black:"bread_black_large.png", white:"bread_white_large.png", thumbBlack:"bread_black_thumb.png", thumbWhite:"bread_white_thumb.png"},
+  {id:"breadtext", name:"Sliced bread (Text)", black:"breadtext_black_large.png", white:"breadtext_white_large.png", thumbBlack:"breadtext_black_thumb.png", thumbWhite:"breadtext_white_thumb.png"},
+  {id:"got_arrested", name:"I got arrested", black:"gotarrested_black_large.png", white:"gotarrested_white_large.png", thumbBlack:"gotarrested_black_thumb.png", thumbWhite:"gotarrested_white_thumb.png"},
+  {id:"gotarrestedtext", name:"I got arrested (Text)", black:null, white:"gotarrestedtext_white_large.png", thumbBlack:null, thumbWhite:"gotarrestedtext_white_thumb.png"},
+  {id:"seagulls", name:"I never throw chips to seagulls", black:"seagulls_black_large.png", white:"seagulls_white_large.png", thumbBlack:"seagulls_black_thumb.png", thumbWhite:"seagulls_white_thumb.png"},
+  {id:"seagullstext", name:"I never throw chips to seagulls (Text)", black:"seagullstext_black_large.png", white:"seagullstext_white_large.png", thumbBlack:"seagullstext_black_thumb.png", thumbWhite:"seagullstext_white_thumb.png"},
+  {id:"toystory", name:"Toy Story", black:"toystory_black_large.png", white:"toystory_white_large.png", thumbBlack:"toystory_black_thumb.png", thumbWhite:"toystory_white_thumb.png"},
+  {id:"toystorytext", name:"Toy Story (Text)", black:"toystorytext_black_large.png", white:"toystorytext_white_large.png", thumbBlack:"toystorytext_black_thumb.png", thumbWhite:"toystorytext_white_thumb.png"}
 ];
 
 let cart=[];
@@ -182,52 +85,24 @@ function populateSelector(){
 function createCard(design, color){
   const div=document.createElement("div");
   div.className="thumb-container";
-
   const img=document.createElement("img");
-
-  // Use thumbnails for grid
-  let thumbSrc;
-  if(design.id === "cake") {
-    thumbSrc = color === "black" ? "Cake_black_thumb.png" : "Cake_white_thumb.png";
-  } else {
-    thumbSrc = color === "black" ? design.black : design.white;
-  }
-  img.src = thumbSrc + version;
+  img.src = (color === "black" ? design.thumbBlack : design.thumbWhite) + version;
   img.className="large-img";
-
-  // Zoom uses large image
-  img.onclick = ()=>{
-    const largeSrc = color === "black" ? design.black : design.white;
-    openZoom(largeSrc + version);
-  };
-
+  img.onclick = ()=>openZoom((color === "black" ? design.black : design.white) + version);
   div.appendChild(img);
 
   const magn=document.createElement("div");
   magn.className="magnifier";
   magn.innerHTML="🔍";
-  magn.onclick=()=>{
-    const largeSrc = color === "black" ? design.black : design.white;
-    openZoom(largeSrc + version);
-  };
+  magn.onclick = ()=>openZoom((color === "black" ? design.black : design.white) + version);
   div.appendChild(magn);
 
   const size=document.createElement("select");
-  ["Small","Medium","Large","XL"].forEach(s=>{
-    const o=document.createElement("option");
-    o.value=s;
-    o.textContent=s;
-    size.appendChild(o);
-  });
+  ["Small","Medium","Large","XL"].forEach(s=>{const o=document.createElement("option"); o.value=s; o.textContent=s; size.appendChild(o);});
   div.appendChild(size);
 
   const qty=document.createElement("select");
-  for(let i=1;i<=10;i++){
-    const o=document.createElement("option");
-    o.value=i;
-    o.textContent=i;
-    qty.appendChild(o);
-  }
+  for(let i=1;i<=10;i++){const o=document.createElement("option"); o.value=i; o.textContent=i; qty.appendChild(o);}
   div.appendChild(qty);
 
   const buttons=document.createElement("div");
@@ -236,25 +111,13 @@ function createCard(design, color){
   const add=document.createElement("button");
   add.textContent="Add to Cart";
   add.className="add-effect";
-  add.onclick=()=>{
-    cart.push({id:nextId++, name:design.name, color, size:size.value, qty:parseInt(qty.value), price});
-    updateCart();
-  };
+  add.onclick=()=>{cart.push({id:nextId++, name:design.name, color, size:size.value, qty:parseInt(qty.value), price}); updateCart();};
   buttons.appendChild(add);
 
   const buy=document.createElement("button");
   buy.textContent="Buy";
-  buy.onclick=()=>{
-    cart.push({id:nextId++, name:design.name, color, size:size.value, qty:parseInt(qty.value), price});
-    updateCart();
-    document.getElementById("paypal-button-container").scrollIntoView({behavior:"smooth"});
-  };
+  buy.onclick=()=>{cart.push({id:nextId++, name:design.name, color, size:size.value, qty:parseInt(qty.value), price}); updateCart(); document.getElementById("paypal-button-container").scrollIntoView({behavior:"smooth"});};
   buttons.appendChild(buy);
-
-  const view=document.createElement("button");
-  view.textContent="View Cart";
-  view.onclick=()=>document.getElementById("cartContainer").scrollIntoView({behavior:"smooth"});
-  buttons.appendChild(view);
 
   div.appendChild(buttons);
   return div;
@@ -264,8 +127,8 @@ function renderGrid(){
   const container=document.getElementById("thumbnailContainer");
   container.innerHTML="";
   designs.forEach(d=>{
-    container.appendChild(createCard(d,"black"));
-    container.appendChild(createCard(d,"white"));
+    if (d.black) container.appendChild(createCard(d,"black"));
+    if (d.white) container.appendChild(createCard(d,"white"));
   });
 }
 
@@ -275,25 +138,18 @@ function filterJoke(){
   const container=document.getElementById("thumbnailContainer");
   container.innerHTML="";
   const design=designs.find(d=>d.id===id);
-  container.appendChild(createCard(design,"black"));
-  container.appendChild(createCard(design,"white"));
+  if (design.black) container.appendChild(createCard(design,"black"));
+  if (design.white) container.appendChild(createCard(design,"white"));
 }
 
-function resetHome(){
-  document.getElementById("jokeSelect").value="";
-  renderGrid();
-}
-
+function resetHome(){document.getElementById("jokeSelect").value=""; renderGrid();}
 document.getElementById("jokeSelect").addEventListener("change",filterJoke);
 
 function updateCart(){
   const display=document.getElementById("cartDisplay");
   const container=document.getElementById("cartContainer");
   display.innerHTML="";
-  if(cart.length===0){
-    container.style.display="none";
-    return;
-  }
+  if(cart.length===0){container.style.display="none"; return;}
   container.style.display="block";
   let subtotal=0;
   cart.forEach(item=>{
@@ -316,13 +172,11 @@ function updateCart(){
     row.appendChild(right);
     display.appendChild(row);
   });
-
   const shipping=cart.length<=2?12:cart.length<=5?20:29;
   const total=subtotal+shipping;
   const totalDiv=document.createElement("div");
   totalDiv.innerHTML=`<p>Subtotal $${subtotal}</p><p>Shipping $${shipping}</p><h3>Total $${total}</h3>`;
   display.appendChild(totalDiv);
-
   renderPayPal(total);
 }
 
@@ -331,32 +185,16 @@ function renderPayPal(total){
   container.innerHTML="";
   if(!total || !window.paypal) return;
   paypal.Buttons({
-    createOrder:(data,actions)=>{
-      return actions.order.create({purchase_units:[{amount:{value:total.toFixed(2)}}]});
-    },
-    onApprove:(data,actions)=>{
-      return actions.order.capture().then(()=>{
-        alert("Payment successful!");
-        cart=[];
-        updateCart();
-      });
-    }
+    createOrder:(data,actions)=>{return actions.order.create({purchase_units:[{amount:{value:total.toFixed(2)}}]});},
+    onApprove:(data,actions)=>{return actions.order.capture().then(()=>{alert("Payment successful!"); cart=[]; updateCart();});}
   }).render("#paypal-button-container");
 }
 
-function openZoom(src){
-  document.getElementById("zoomOverlay").style.display="flex";
-  document.getElementById("zoomedImage").src=src;
-}
-
-function closeZoom(){
-  document.getElementById("zoomOverlay").style.display="none";
-}
+function openZoom(src){document.getElementById("zoomOverlay").style.display="flex"; document.getElementById("zoomedImage").src=src;}
+function closeZoom(){document.getElementById("zoomOverlay").style.display="none";}
 
 populateSelector();
 renderGrid();
-
 </script>
-
 </body>
 </html>
