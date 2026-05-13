@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sunny Jim Stingy Joke T-Shirts</title>
+<title>Sunny Jim's Jokes T-Shirts</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 body{font-family:Arial;text-align:center;background:#f4f4f4;margin:0;padding:20px;}
@@ -11,7 +11,8 @@ h1{font-family:"Comic Sans MS",cursive;font-size:8vw;}
 select{padding:8px;font-size:16px;margin-bottom:10px;}
 #thumbnailContainer{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;}
 .thumb-container{display:flex;flex-direction:column;align-items:center;background:white;padding:10px;border-radius:8px;width:280px;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.1);}
-.large-img{width:100%;height:auto;border:2px solid #ccc;cursor:pointer;}
+/* Updated this to handle large images in the grid */
+.large-img{width:100%; height:250px; object-fit:contain; border:2px solid #ccc; cursor:pointer; background:#eee;}
 .magnifier{position:absolute;top:5px;right:5px;font-size:20px;background:white;border-radius:50%;padding:5px;cursor:pointer;}
 .thumb-buttons{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
 button{padding:8px 14px;cursor:pointer;border-radius:5px;border:none;background:#ddd;}
@@ -26,7 +27,7 @@ button:hover{background:#ccc;}
 </head>
 <body>
 
-<h1>Sunny Jim Stingy Joke T-Shirts</h1>
+<h1>Sunny Jim's Jokes T-Shirts</h1>
 <img id="baseImage" src="sjimstingy.png">
 <br>
 <select id="jokeSelect"><option value="">Select joke</option></select>
@@ -51,21 +52,23 @@ button:hover{background:#ccc;}
 <script>
 const version="?v=2";
 
+// Removed all thumb properties - now using large images for everything
 const designs = [
-  {id:"cake", name:"BUT YOU TAKE THE CAKE", black:"Cake_black_large.png", white:"Cake_white_large.png", thumbBlack:"Cake_black_thumb.png", thumbWhite:"Cake_white_thumb.png"},
-  {id:"caketext", name:"BUT YOU TAKE THE CAKE (Text)", black:null, white:"caketext_white_large.png", thumbBlack:null, thumbWhite:"caketext_white_thumb.png"},
-  {id:"borrowed_pen", name:"Borrowed a pen", black:"pen_black_large.png", white:"pen_white_large.png", thumbBlack:"pen_black_thumb.png", thumbWhite:"pen_white_thumb.png"},
-  {id:"pentext", name:"Borrowed a pen (Text)", black:"pentext_black_large.png", white:"pentext_white_large.png", thumbBlack:"pentext_black_thumb.png", thumbWhite:"pentext_white_thumb.png"},
-  {id:"kids_lunches", name:"Kids lunches", black:"kidslunches_black_large.png", white:"kidslunches_white_large.png", thumbBlack:"kidslunches_black_thumb.png", thumbWhite:"kidslunches_white_thumb.png"},
-  {id:"kidslunchestext", name:"Kids lunches (Text)", black:"kidslunchestext_black_large.png", white:"kidslunchestext_white_large.png", thumbBlack:"kidslunchestext_black_thumb.png", thumbWhite:"kidslunchestext_white_thumb.png"},
-  {id:"sliced_bread", name:"Sliced bread", black:"bread_black_large.png", white:"bread_white_large.png", thumbBlack:"bread_black_thumb.png", thumbWhite:"bread_white_thumb.png"},
-  {id:"breadtext", name:"Sliced bread (Text)", black:"breadtext_black_large.png", white:"breadtext_white_large.png", thumbBlack:"breadtext_black_thumb.png", thumbWhite:"breadtext_white_thumb.png"},
-  {id:"got_arrested", name:"I got arrested", black:"gotarrested_black_large.png", white:"gotarrested_white_large.png", thumbBlack:"gotarrested_black_thumb.png", thumbWhite:"gotarrested_white_thumb.png"},
-  {id:"gotarrestedtext", name:"I got arrested (Text)", black:null, white:"gotarrestedtext_white_large.png", thumbBlack:null, thumbWhite:"gotarrestedtext_white_thumb.png"},
-  {id:"seagulls", name:"I never throw chips to seagulls", black:"seagulls_black_large.png", white:"seagulls_white_large.png", thumbBlack:"seagulls_black_thumb.png", thumbWhite:"seagulls_white_thumb.png"},
-  {id:"seagullstext", name:"I never throw chips to seagulls (Text)", black:"seagullstext_black_large.png", white:"seagullstext_white_large.png", thumbBlack:"seagullstext_black_thumb.png", thumbWhite:"seagullstext_white_thumb.png"},
-  {id:"toystory", name:"Toy Story", black:"toystory_black_large.png", white:"toystory_white_large.png", thumbBlack:"toystory_black_thumb.png", thumbWhite:"toystory_white_thumb.png"},
-  {id:"toystorytext", name:"Toy Story (Text)", black:"toystorytext_black_large.png", white:"toystorytext_white_large.png", thumbBlack:"toystorytext_black_thumb.png", thumbWhite:"toystorytext_white_thumb.png"}
+  {id:"cake", name:"BUT YOU TAKE THE CAKE", black:"Cake_black_large.png", white:"Cake_white_large.png"},
+  {id:"caketext", name:"BUT YOU TAKE THE CAKE (Text)", black:null, white:"caketext_white_large.png"},
+  {id:"borrowed_pen", name:"Borrowed a pen", black:"pen_black_large.png", white:"pen_white_large.png"},
+  {id:"pentext", name:"Borrowed a pen (Text)", black:"pentext_black_large.png", white:"pentext_white_large.png"},
+  {id:"kids_lunches", name:"Kids lunches", black:"kidslunches_black_large.png", white:"kidslunches_white_large.png"},
+  {id:"kidslunchestext", name:"Kids lunches (Text)", black:"kidslunchestext_black_large.png", white:"kidslunchestext_white_large.png"},
+  {id:"sliced_bread", name:"Sliced bread", black:"bread_black_large.png", white:"bread_white_large.png"},
+  {id:"breadtext", name:"Sliced bread (Text)", black:"breadtext_black_large.png", white:"breadtext_white_large.png"},
+  {id:"got_arrested", name:"I got arrested", black:"gotarrested_black_large.png", white:"gotarrested_white_large.png"},
+{id:"gotarrestedtext", name:"I got arrested (Text)", black:"gotarrestedtext_black_large.png", white:"gotarrestedtext_white_large.png"},
+
+  {id:"seagulls", name:"I never throw chips to seagulls", black:"seagulls_black_large.png", white:"seagulls_white_large.png"},
+  {id:"seagullstext", name:"I never throw chips to seagulls (Text)", black:"seagullstext_black_large.png", white:"seagullstext_white_large.png"},
+  {id:"toystory", name:"Toy Story", black:"toystory_black_large.png", white:"toystory_white_large.png"},
+  {id:"toystorytext", name:"Toy Story (Text)", black:"toystorytext_black_large.png", white:"toystorytext_white_large.png"}
 ];
 
 let cart=[];
@@ -86,15 +89,18 @@ function createCard(design, color){
   const div=document.createElement("div");
   div.className="thumb-container";
   const img=document.createElement("img");
-  img.src = (color === "black" ? design.thumbBlack : design.thumbWhite) + version;
+  
+  // Pointing directly to the large image now
+  const imgSrc = (color === "black" ? design.black : design.white) + version;
+  img.src = imgSrc;
   img.className="large-img";
-  img.onclick = ()=>openZoom((color === "black" ? design.black : design.white) + version);
+  img.onclick = ()=>openZoom(imgSrc);
   div.appendChild(img);
 
   const magn=document.createElement("div");
   magn.className="magnifier";
   magn.innerHTML="🔍";
-  magn.onclick = ()=>openZoom((color === "black" ? design.black : design.white) + version);
+  magn.onclick = ()=>openZoom(imgSrc);
   div.appendChild(magn);
 
   const size=document.createElement("select");
